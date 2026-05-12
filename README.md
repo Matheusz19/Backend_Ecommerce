@@ -1,13 +1,13 @@
 # 🛒 Plataforma de E-commerce (Full-Stack)
 
-Este projeto é uma plataforma de E-commerce desenvolvida como demonstração de competências em desenvolvimento Full-Stack, utilizando **Java com Spring Boot** no Back-end e **React** no Front-end.
+Este projeto é uma plataforma de E-commerce desenvolvida utilizando **Java com Spring Boot** no Back-end e **React** no Front-end.
 
 O sistema implementa o gerenciamento de catálogo de produtos, carrinho de compras e controle de pedidos (checkout), aplicando boas práticas de engenharia de software.
 
 ## 🚀 Tecnologias Utilizadas
 
 **Back-end:**
-* Java 17+
+* Java 21+
 * Spring Boot (Web, Data JPA, Validation)
 * Banco de Dados em Memória (H2)
 * Lombok (Redução de boilerplate)
@@ -19,7 +19,7 @@ O sistema implementa o gerenciamento de catálogo de produtos, carrinho de compr
 
 ## 🏛️ Arquitetura e Padrões de Projeto
 
-A aplicação foi desenhada seguindo o princípio de **Monolito Modular**, aplicando conceitos do **Domain-Driven Design (DDD)** para separação de Bounded Contexts, e **Clean Code/SOLID** através do design em 3 camadas:
+A aplicação foi desenhada aplicando conceitos do **Domain-Driven Design (DDD)** para separação de Bounded Contexts, e **Clean Code/SOLID** através do design em 3 camadas:
 
 1. **Camada de Controle (Controllers):** Expõe as APIs REST e lida com requisições HTTP.
 2. **Camada de Serviço (Services):** Contém as regras de negócio e orquestra a comunicação entre os domínios.
@@ -34,13 +34,13 @@ A aplicação foi desenhada seguindo o princípio de **Monolito Modular**, aplic
 
 ## 📊 Diagramas de Arquitetura
 
-Os diagramas abaixo ilustram o design da aplicação. *(Visualizável no GitHub ou editores com suporte a Mermaid)*.
+Os diagramas abaixo ilustram o design da aplicação. 
 
 ### Diagrama de Componentes
 
 ```mermaid
 graph TD
-    Client[Front-end: React Application] -->|Chamadas HTTP/REST| API[Back-end: Spring Boot API]
+    Client[Application] -->|Chamadas HTTP/REST| API[Back-end: Spring Boot API]
     
     subgraph Back-end Spring Boot
         direction TB
