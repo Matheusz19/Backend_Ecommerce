@@ -32,7 +32,6 @@ public class PedidoService {
         pedido.setStatus(StatusPedido.PENDENTE);
         pedido.setTotal(carrinho.calcularTotal());
 
-        // Converte os itens do carrinho para itens do pedido
         List<ItemPedido> itensPedido = carrinho.getItens().stream()
                 .map(itemCart -> new ItemPedido(
                         null,

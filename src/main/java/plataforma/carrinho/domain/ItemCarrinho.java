@@ -2,9 +2,7 @@ package plataforma.carrinho.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -19,7 +17,6 @@ public class ItemCarrinho {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Referência ao contexto de Catálogo (Desacoplamento do DDD)
     private Long produtoId;
 
     @Positive(message = "A quantidade deve ser maior que zero")

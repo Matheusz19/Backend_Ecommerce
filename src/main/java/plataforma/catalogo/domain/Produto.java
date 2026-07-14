@@ -4,15 +4,15 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.envers.Audited;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "produtos")
 @Data
+@Audited
 @NoArgsConstructor
 @AllArgsConstructor
 public class Produto {

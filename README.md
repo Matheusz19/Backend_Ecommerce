@@ -10,6 +10,7 @@ O sistema implementa o gerenciamento de catálogo de produtos, carrinho de compr
 * Java 21+
 * Spring Boot (Web, Data JPA, Validation)
 * Banco de Dados em Memória (H2)
+* Hibernate Envers (Auditoria/Histórico)
 * Lombok (Redução de boilerplate)
 * Maven
 
@@ -32,9 +33,16 @@ A aplicação foi desenhada aplicando conceitos do **Domain-Driven Design (DDD)*
 
 ---
 
+## 🗄️ Persistência, Auditoria e Testes
+
+* **Persistência e Histórico:** Utiliza **Spring Data JPA** com banco **H2**. Implementa **Hibernate Envers** (`@Audited`) para rastrear o histórico de alterações no banco (como variações de preço e mudança de status do pedido) sem sujar a regra de negócio. Também utiliza *Query Methods* customizados.
+* **Testes Automatizados:** A estabilidade da persistência é garantida com testes de integração utilizando **JUnit 5**, **AssertJ** e `@DataJpaTest`, validando repositórios e queries em um banco em memória isolado.
+
+---
+
 ## 📊 Diagramas de Arquitetura
 
-Os diagramas abaixo ilustram o design da aplicação. 
+Os diagramas abaixo ilustram o design e o fluxo de dados da aplicação.
 
 ### Diagrama de Componentes
 
@@ -61,3 +69,64 @@ graph TD
     end
     
     Repositories --> DB[(H2 Database)]
+  ```
+
+```mermaid
+sequenceDiagram
+    participant UI as Interface React
+    participant PedidoCtrl as PedidoController
+    participant PedidoSrv as PedidoService
+    participant CarrinhoSrv as CarrinhoService
+    participant DB as Banco de Dados
+    
+    UI->>PedidoCtrl: POST /api/pedidos/checkout/{carrinhoId}
+    PedidoCtrl->>PedidoSrv: realizarCheckout(carrinhoId)
+    
+    PedidoSrv->>CarrinhoSrv: buscarPorId(carrinhoId)
+    CarrinhoSrv-->>PedidoSrv: Retorna Carrinho com Itens
+    
+    PedidoSrv->>PedidoSrv: Calcula o Total e Cria o Pedido
+    
+    PedidoSrv->>DB: save(Pedido)
+    DB-->>PedidoSrv: Pedido Salvo (Status: PENDENTE)
+    
+    PedidoSrv-->>PedidoCtrl: Retorna Dados do Pedido
+    PedidoCtrl-->>UI: 201 Created (JSON)
+```
+
+```mermaid
+    erDiagram
+        PRODUTO {
+            Long id PK
+            String nome
+            String descricao
+            BigDecimal preco
+            Integer quantidadeEstoque
+        }
+        CARRINHO {
+            Long id PK
+        }
+        ITEM_CARRINHO {
+            Long id PK
+            Long carrinho_id FK
+            Long produtoId "Referência ao Catálogo"
+            Integer quantidade
+            BigDecimal precoUnitario
+        }
+        PEDIDO {
+            Long id PK
+            String status
+            BigDecimal total
+            LocalDateTime dataCriacao
+        }
+        ITEM_PEDIDO {
+            Long id PK
+            Long pedido_id FK
+            Long produtoId "Referência ao Catálogo"
+            Integer quantidade
+            BigDecimal precoUnitario
+        }
+    
+        CARRINHO ||--o{ ITEM_CARRINHO : "contém"
+        PEDIDO ||--o{ ITEM_PEDIDO : "contém"
+  ```

@@ -1,15 +1,15 @@
 package plataforma.pedido.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.envers.Audited;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "itens_pedido")
 @Data
+@Audited
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemPedido {
@@ -18,7 +18,7 @@ public class ItemPedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long produtoId; // Referência ao Catálogo
+    private Long produtoId;
     private Integer quantidade;
     private BigDecimal precoUnitario;
 }

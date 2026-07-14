@@ -27,7 +27,6 @@ public class CarrinhoService {
     public Carrinho adicionarItem(Long carrinhoId, Long produtoId, Integer quantidade) {
         Carrinho carrinho = buscarPorId(carrinhoId);
 
-        // Comunicação entre contextos: buscando o produto no catálogo
         Produto produto = produtoService.listarTodos().stream()
                 .filter(p -> p.getId().equals(produtoId))
                 .findFirst()
