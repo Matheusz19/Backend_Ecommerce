@@ -2,6 +2,8 @@ package plataforma.pedido.service;
 
 import plataforma.carrinho.domain.Carrinho;
 import plataforma.carrinho.service.CarrinhoService;
+import plataforma.pedido.client.PagamentoClient;
+import plataforma.pedido.client.PagamentoRequestDTO;
 import plataforma.pedido.domain.ItemPedido;
 import plataforma.pedido.domain.Pedido;
 import plataforma.pedido.domain.StatusPedido;
@@ -19,6 +21,7 @@ public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
     private final CarrinhoService carrinhoService;
+    private final PagamentoClient pagamentoClient;
 
     @Transactional
     public Pedido realizarCheckout(Long carrinhoId) {
@@ -41,8 +44,13 @@ public class PedidoService {
                 .collect(Collectors.toList());
 
         pedido.getItens().addAll(itensPedido);
+        Pedido pedidoSalvo = pedidoRepository.save(pedido);
 
-        return pedidoRepository.save(pedido);
+        PagamentoRequestDTO pagamentoRequest = new PagamentoRequestDTO(pedidoSalvo.getId(), pedidoSalvo.getTotal());
+        pagamentoClient.processarPagamento(pagamentoRequest);
+
+        pedidoSalvo.setStatus(StatusPedido.PAGO);
+        return pedidoRepository.save(pedidoSalvo);
     }
 
     public Pedido buscarPorId(Long id) {
